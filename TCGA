@@ -19,7 +19,7 @@ library(pheatmap)
 library(ggplot2)
 library(gplots)
 
-# Download the TCGA file first from ： Code：
+# Download the TCGA file first from ：https://share.weiyun.com/5oc4Qyu  Code：afbnqb
 exprSet <- read.table("TCGA_symbol.txt",sep="\t",header=T,check.names=F)
 exprSet <- as.matrix(exprSet)
 rownames(exprSet) <- exprSet[,1]
