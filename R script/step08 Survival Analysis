@@ -1,0 +1,37 @@
+###################################
+### Create by: Chang Yu
+### Date: 2019-03-10
+### Email: yuchang924@hotmail.com
+###################################
+
+rm(list=ls())
+options(stringsAsFactors = F)
+setwd('.../') #users set by themselves
+
+# install packages
+if(F){
+  install.packages(c("survival","survminer","ggplot2","dplyr"))
+}
+
+# Load the required packages
+library(survival)
+library(survminer)
+library(ggplot2)
+library(dplyr)
+
+# Survival Analysis
+EC<- read.table('exp_clinical.txt',header=T,sep='\t')  #EC =ExpreSA_clinical
+EC[,c(2:9)] <- lapply(EC[,c(2:9)],as.numeric)
+x <- c("MAD2L1","TOP2A","CCNB1","CHEK1","CDC6","UBE2C")
+for (i in 1:6){
+  group<-EC[,x[i]]<median(EC[,x[i]])
+  surv <- Surv(EC$futime,EC$status)
+  fit <- survfit(surv~group,data=EC)
+  p <- ggsurvplot (fit,conf.int = T,conf.int.style="step",
+                   risk.table = "abs_pct",
+                   risk.table.y.text.col = TRUE,
+                   xlab="Time(months)", 
+                   risk.table.col="strata",
+                   pval=T,title=paste0(x[i]))
+  print(p)
+}
