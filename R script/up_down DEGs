@@ -1,0 +1,34 @@
+###################################
+### Create by: Chang Yu
+### Date: 2019-03-10
+### Email: yuchang924@hotmail.com
+###################################
+
+rm(list=ls())
+options(stringsAsFactors=F)
+setwd('.../')   #users set by themselves
+
+# process data
+merge <- function(data,R){
+  x <- read.csv(paste0(data,R,"_sigDEGs.csv",sep=""),header=T,sep = ',')
+  x <- x[c(1,2,6)]
+  colnames(x) <- c("gene","logFC","FDR")
+  rownames(x) <- x[,1]
+  x <- x[,-1]
+  return(x)
+}
+# Overlapping down_DEGs
+D1 <- merge(113513,"down")
+D2 <- merge(9348,"down")
+D3 <- merge(22598,"down")
+D4 <- merge("TCGA","down")
+downDEGs <- Reduce(intersect,list(rownames(D1),rownames(D2),rownames(D3),rownames(D4)))  
+write.csv(downDEGs,"downDEGs.csv",row.names = F)
+
+# Overlapping up_DEGs
+U1 <- merge(113513,"up")
+U2 <- merge(9348,"up")
+U3 <- merge(22598,"up")
+U4 <- merge("TCGA","up")
+upDEGs <- Reduce(intersect,list(rownames(U1),rownames(U2),rownames(U3),rownames(U4))) 
+write.csv(upDEGs,"upDEGs.csv",row.names = F)
