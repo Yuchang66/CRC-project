@@ -1,0 +1,53 @@
+###################################
+### Create by: Chang Yu
+### Date: 2019-03-10
+### Email: yuchang924@hotmail.com
+###################################
+
+rm(list=ls())
+options(stringsAsFactors=F)
+# install packages
+if(F){
+   install.packages("VennDiagram")
+}
+
+# Load the required packages
+library(VennDiagram)
+# downregulated-DEGs
+down1 <- read.csv("113513_sigDEGs_down.csv",header=T,sep=",")
+down2 <- read.csv("9348_sigDEGs_down.csv",header=T,sep=",")
+down3 <- read.csv("22598_sigDEGs_down.csv",header=T,sep=",")
+down4 <- read.csv("TCGA_sigDEGs_down.csv",header=T,sep=",")
+# upregulated-DEGs
+up1 <- read.csv("113513_sigDEGs_up.csv",header=T,sep=",")
+up2 <- read.csv("9348_sigDEGs_up.csv",header=T,sep=",")
+up3 <- read.csv("22598_sigDEGs_up.csv",header=T,sep=",")
+up4 <- read.csv("TCGA_sigDEGs_up.csv",header=T,sep=",")
+
+VP <- function(m1,m2,m3,m4){
+  venn.plot <- venn.diagram(
+  x = list(
+    GSE113513 = m1$X,
+    GSE9348 = m2$X,
+    GSE22598 = m3$X,
+    TCGA = m4$X
+  ),
+  filename = "Venn_plot.tiff",
+  col = "gray7",
+  lwd = 3, 
+  fill = c("cornflowerblue", "chartreuse2", "yellow", "darkorchid1"),
+  alpha = 0.50,
+  label.col = c("darkblue", "darkblue", "darkblue", "darkblue", "darkblue", "darkblue",
+                "darkblue", "darkblue", "darkblue", "darkblue",
+                "darkblue", "darkblue", "darkblue", "darkblue", "darkblue"),
+  cex = 1.8,
+  fontfamily = "serif",
+  fontface = "bold",
+  cat.col = c("darkblue", "darkgreen", "orange", "darkorchid4"),
+  cat.cex = 1.0,
+  cat.fontface = "bold",
+  cat.fontfamily = "serif")
+}
+
+VP(up1,up2,up3,up4)
+VP(down1,down2,down3,down4)
