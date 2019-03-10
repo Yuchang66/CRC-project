@@ -1,0 +1,50 @@
+###################################
+### Create by: Chang Yu
+### Date: 2019-03-10
+### Email: yuchang924@hotmail.com
+###################################
+
+rm(list=ls())
+options(stringsAsFactors=F)
+
+# install packages
+if(F){
+  BiocManager::install(c("clusterProfiler","org.Hs.eg.db","DOSE","enrichplot"))
+  install.packages(c("stringr","ggplot2"))
+}
+
+# Load the required packages
+library(clusterProfiler)
+library(org.Hs.eg.db)
+library(ggplot2)
+library(stringr)
+library(DOSE)
+library(enrichplot)
+
+#GO annotation
+GO <- function(R){
+  x <- read.csv(paste0(R,'.csv',sep=''),header = T,sep=',')
+  x <-  bitr(x[,1],fromType = 'SYMBOL',toType = 'ENTREZID',OrgDb = org.Hs.eg.db)
+  M <- enrichGO(x[,2],OrgDb=org.Hs.eg.db, keyType = "ENTREZID", ont = "all",
+                pvalueCutoff = 0.05, pAdjustMethod = "BH", qvalueCutoff = 0.05,
+                minGSSize = 10, maxGSSize = 500,pool=TRUE)
+  p <- barplot(M,split='ONTOLOGY',font.size = 12,title=paste0(R,'regulated',sep=''))+facet_grid(ONTOLOGY~.,scales = 'free')+scale_x_discrete(labels=function(x) str_wrap(x,width=80))
+  ggsave(file=paste0(R,'total','.pdf'),p, width = 10, height = 10)
+  write.csv(M,file = paste0(R,'total','.csv'))
+}
+GO('GeneDown')
+GO('GeneUp')
+
+#KEGG annotation
+DEGs_total <- read.csv('DEGs_total.csv',header=T,sep=',')
+DEGs_total <- bitr(DEGs_total[,1],fromType = 'SYMBOL',toType = 'ENTREZID',OrgDb=org.Hs.eg.db)
+KEGG <- enrichKEGG(DEGs_total[,2], organism = "hsa", keyType = "ncbi-geneid", pvalueCutoff = 0.05,
+                   pAdjustMethod = "BH", minGSSize = 5, maxGSSize = 500,
+                   qvalueCutoff = 0.05 )
+write.csv(KEGG,"KEGG.csv")
+kegg <- barplot(KEGG,font.size = 12,title='KEGG enrichment of DEGs')
+ggsave(file="barplot_KEGG.pdf",kegg, width = 10, height = 10)
+#for cnetplot
+kegg2<- setReadable(KEGG,OrgDb = org.Hs.eg.db,keytype = 'ENTREZID') 
+ekk <- cnetplot(kegg2,circular=TRUE,colorEdge=TRUE, node_label = TRUE,ayout='kk')
+ggsave("cnetplot_kegg.pdf", ekk, width = 10, height = 10) 
