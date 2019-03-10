@@ -85,14 +85,14 @@ head(data)
 data$threshold<- ifelse(data$FDR<0.05 & abs(data$logFC)>= 1,ifelse(data$logFC > 1,'Up','Down'),'Not')
 color <- c(Up = "red",Not = "gray",Down = "blue")
 p <- ggplot(data = data, aes(x = logFC, y =-log10 (FDR),
-                             colour=threshold,fill=threshold)) 
-+  scale_color_manual(values=c("blue", "grey","red"))
-+  geom_point(alpha=0.6, size=1.2) 
-+  xlim(c(-6, 6))
-+  theme_bw(base_size = 12, base_family = "Times")
-+  geom_vline(xintercept=c(-1,1),lty=4,col="grey",lwd=0.6)
-+  geom_hline(yintercept = -log10(0.05),lty=4,col="grey",lwd=0.6)
-+  theme(legend.position="right",
+                             colour=threshold,fill=threshold))+ 
+   scale_color_manual(values=c("blue", "grey","red"))+  
+   geom_point(alpha=0.6, size=1.2)+ 
+   xlim(c(-6, 6))+ 
+   theme_bw(base_size = 12, base_family = "Times")+  
+   geom_vline(xintercept=c(-1,1),lty=4,col="grey",lwd=0.6)+ 
+   geom_hline(yintercept = -log10(0.05),lty=4,col="grey",lwd=0.6)+  
+   theme(legend.position="right",
         panel.grid=element_blank(),
         legend.title = element_blank(),
         legend.text= element_text(color="black",family = "Times", size=14),
@@ -100,6 +100,6 @@ p <- ggplot(data = data, aes(x = logFC, y =-log10 (FDR),
         axis.text.x = element_text( color="black", size=14),
         axis.text.y = element_text( color="black", size=14),
         axis.title.x = element_text( color="black", size=14),
-        axis.title.y = element_text(color="black", size=14))
-+  labs(x="log2FC",y="-log10 (adj.P.Val)",title ="TCGA")
+        axis.title.y = element_text(color="black", size=14))+  
+        labs(x="log2FC",y="-log10 (adj.P.Val)",title ="TCGA")
 p
