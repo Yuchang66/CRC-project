@@ -6,7 +6,7 @@
 
 rm(list=ls())
 options(stringsAsFactors=F)
-
+setwd(.../)  #users set by themselves
 # install packages
 if(F){
   BiocManager::install(c("clusterProfiler","org.Hs.eg.db","DOSE","enrichplot"))
@@ -26,7 +26,7 @@ GO <- function(R){
   x <- read.csv(paste0(R,'.csv',sep=''),header = T,sep=',')
   x <-  bitr(x[,1],fromType = 'SYMBOL',toType = 'ENTREZID',OrgDb = org.Hs.eg.db)
   M <- enrichGO(x[,2],OrgDb=org.Hs.eg.db, keyType = "ENTREZID", ont = "all",
-                pvalueCutoff = 0.05, pAdjustMethod = "BH", qvalueCutoff = 0.05,
+                pvalueCutoff = 0.05, pAdjustMethod = "BH", qvalueCutoff = 0.05,readable = TRUE,
                 minGSSize = 10, maxGSSize = 500,pool=TRUE)
   p <- barplot(M,split='ONTOLOGY',font.size = 12,title=paste0(R,'regulated',sep=''))+facet_grid(ONTOLOGY~.,scales = 'free')+scale_x_discrete(labels=function(x) str_wrap(x,width=80))
   ggsave(file=paste0(R,'total','.pdf'),p, width = 10, height = 10)
@@ -45,6 +45,6 @@ write.csv(KEGG,"KEGG.csv")
 kegg <- barplot(KEGG,font.size = 12,title='KEGG enrichment of DEGs')
 ggsave(file="barplot_KEGG.pdf",kegg, width = 10, height = 10)
 #for cnetplot
-kegg2<- setReadable(KEGG,OrgDb = org.Hs.eg.db,keytype = 'ENTREZID') 
+kegg2<- setReadable(KEGG,OrgDb = org.Hs.eg.db,keyType = 'ENTREZID') 
 ekk <- cnetplot(kegg2,circular=TRUE,colorEdge=TRUE, node_label = TRUE,ayout='kk')
 ggsave("cnetplot_kegg.pdf", ekk, width = 10, height = 10) 
