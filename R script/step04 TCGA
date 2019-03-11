@@ -41,11 +41,8 @@ et <- exactTest(y,pair = c("normal","tumor"))
 oderDEGS<- topTags(et, adjust.method = "BH",sort.by="PValue",n=Inf)
 allDEGs <- oderDEGS$table
 sigDEGs <- subset(allDEGs,(allDEGs$FDR<0.05)& (abs(allDEGs$logFC)>1))
-nrow(sigDEGs) #12237
 sigDEGs_up <- subset(allDEGs,(allDEGs$FDR<0.05)& (allDEGs$logFC)>1)
-nrow(sigDEGs_up) #8461
 sigDEGs_down <- subset(allDEGs,(allDEGs$FDR<0.05)& (allDEGs$logFC)< -1)
-nrow(sigDEGs_down) #3776
 write.csv(allDEGs,"allDEGs.csv")
 write.csv(sigDEGs,"sigDEGs.csv")
 write.csv(sigDEGs_up,"sigDEGs_up.csv")
@@ -57,8 +54,6 @@ diffExp <- rbind(id=colnames(count),count[rownames(sigDEGs),]) #DEGs normal expr
 #write.csv(diffExp,"diffExp.csv")
 
 # heatmap 
-dev.off()
-dev.new()
 diffExp <- as.data.frame(diffExp)
 diffExp <- diffExp[-1,]
 sigDEG <- sigDEGs[order(sigDEGs$logFC,decreasing=T),]
@@ -66,7 +61,6 @@ nrow(sigDEGs)
 CDEGs<-sigDEG[c(1:100,12138:12237),] #CDEGs==choose DEGs  including top 100 up/down DEGs
 CDEGs <- rownames(CDEGs)
 matrix <-diffExp[CDEGs,]
-matrix[1:10,1:4]
 matrixexp <- matrix[,1:ncol(matrix)]
 M_dim <- list(rownames(matrix),colnames(matrix))
 heat <- matrix(as.numeric(as.matrix(matrixexp)),nrow=nrow(matrixexp),dimnames=M_dim)
@@ -81,7 +75,6 @@ pheatmap(choose_matrix, color = colorRampPalette(c("blue", "white", "red"))(42),
 
 # volvano plot
 data <- allDEGs
-head(data)
 data$threshold<- ifelse(data$FDR<0.05 & abs(data$logFC)>= 1,ifelse(data$logFC > 1,'Up','Down'),'Not')
 color <- c(Up = "red",Not = "gray",Down = "blue")
 p <- ggplot(data = data, aes(x = logFC, y =-log10 (FDR),
