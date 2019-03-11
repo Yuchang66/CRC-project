@@ -6,7 +6,8 @@
 
 rm(list=ls())
 options(stringsAsFactors=F)
-
+setwd(".../")  #users set by themselves
+ 
 # install packages
 if(F){
   BiocManager::install(c("affy","limma"))
@@ -29,13 +30,9 @@ probeid <- read.csv('PrimeView.na36.annot.csv',header=T,sep=',')
 exp2ID <- merge(probeid,total_exp,by='ID') 
 expreSet<- exp2ID
 expreSet<-expreSet[,-c(1,3)] 
-nrow(expreSet) #49372
 expreSet<- aggregate(expreSet[,2:29],list(expreSet[,1]),mean)   #deduplicated
-head(expreSet)
 rownames(expreSet) <- expreSet[,1]
-nrow(expreSet) #20085
 expreSet<- expreSet[sapply(expreSet[, 1], function(x) { !grepl('///', x) }),]
-nrow(expreSet) #18836
 expreSet<- expreSet[,-1]
 expreSet[1:4,1:4]
 
