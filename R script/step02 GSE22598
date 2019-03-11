@@ -6,7 +6,7 @@
 
 rm(list=ls())
 options(stringsAsFactors=F)
-
+setwd('.../')   #users set by themselves
 # install packages
 if(F){
   BiocManager::install(c("affy","limma"))
