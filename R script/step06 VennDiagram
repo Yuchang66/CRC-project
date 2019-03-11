@@ -4,13 +4,14 @@
 ### Email: yuchang924@hotmail.com
 ###################################
 
+
 rm(list=ls())
 options(stringsAsFactors=F)
-setwd('.../')   #users set by themselves
+#setwd('.../')   #users set by themselves
 
 # install packages
 if(F){
-   install.packages("VennDiagram")
+  install.packages("VennDiagram")
 }
 
 # Load the required packages
@@ -26,30 +27,28 @@ up2 <- read.csv("9348_sigDEGs_up.csv",header=T,sep=",")
 up3 <- read.csv("22598_sigDEGs_up.csv",header=T,sep=",")
 up4 <- read.csv("TCGA_sigDEGs_up.csv",header=T,sep=",")
 
-VP <- function(m1,m2,m3,m4){
+VP <- function(m1,m2,m3,m4,R){
   venn.plot <- venn.diagram(
-  x = list(
-    GSE113513 = m1$X,
-    GSE9348 = m2$X,
-    GSE22598 = m3$X,
-    TCGA = m4$X
-  ),
-  filename = "Venn_plot.tiff",
-  col = "gray7",
-  lwd = 3, 
-  fill = c("cornflowerblue", "chartreuse2", "yellow", "darkorchid1"),
-  alpha = 0.50,
-  label.col = c("darkblue", "darkblue", "darkblue", "darkblue", "darkblue", "darkblue",
-                "darkblue", "darkblue", "darkblue", "darkblue",
-                "darkblue", "darkblue", "darkblue", "darkblue", "darkblue"),
-  cex = 1.8,
-  fontfamily = "serif",
-  fontface = "bold",
-  cat.col = c("darkblue", "darkgreen", "orange", "darkorchid4"),
-  cat.cex = 1.0,
-  cat.fontface = "bold",
-  cat.fontfamily = "serif")
+    x = list(
+      GSE113513 = m1$X,
+      GSE9348 = m2$X,
+      GSE22598 = m3$X,
+      TCGA = m4$X
+    ),
+    filename = paste0(R,"Venn_plot.tiff",sep=''),
+    col = "gray7",
+    lwd = 3, 
+    fill = c("cornflowerblue", "chartreuse2", "yellow", "darkorchid1"),
+    alpha = 0.50,
+    label.col = c(rep("darkblue",15)),
+    cex = 1.8,
+    fontfamily = "serif",
+    fontface = "bold",
+    cat.col = c("darkblue", "darkgreen", "orange", "darkorchid4"),
+    cat.cex = 1.0,
+    cat.fontface = "bold",
+    cat.fontfamily = "serif")
 }
 
-VP(up1,up2,up3,up4)
-VP(down1,down2,down3,down4)
+VP(up1,up2,up3,up4,"up")
+VP(down1,down2,down3,down4,"down")
