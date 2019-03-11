@@ -29,13 +29,9 @@ probeid <- read.csv('HG-U133_Plus_2.na36.annot.csv',header=T,sep=',')
 exp2ID <- merge(probeid,total_exp,by='ID') 
 expreSet<- exp2ID
 expreSet<-expreSet[,-c(1,3)] 
-nrow(expreSet)
 expreSet<- aggregate(expreSet[,2:35],list(expreSet[,1]),mean)   #deduplicated
-head(expreSet)
 rownames(expreSet) <- expreSet[,1]
-nrow(expreSet) #22484
 expreSet<- expreSet[sapply(expreSet[, 1], function(x) { !grepl('///', x) }),]
-nrow(expreSet) #21299
 expreSet<- expreSet[,-1]
 
 # Screening DEGs
@@ -59,7 +55,6 @@ nrow(sigDEGs_down)  #n=659
 
 # pheatmap
 sigDEG <-sigDEGs[order(sigDEGs$logFC,decreasing=T),]
-nrow(sigDEGs)
 CDEGs<-rownames(sigDEG[c(1:100,1225:1324),])
 matrix<- expreSet[CDEGs,]
 matrix <- t(scale(t(matrix)))
